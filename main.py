@@ -113,24 +113,32 @@ class Robot:
             print("Error. Check all Ports.")
             exit(0)
     
-    def driveAlongLine(self, right=True, dist):
+    def driveAlongLine(self, right=True, dist, speed):
 
         if right:
             while (ultraSensorDrive.distance() > dist):
                 if (driveColor.color() == Color.BLACK):
-                    lDriveMotor.run(25)
-                    rDriveMotor.run(30)
+                    lDriveMotor.run(speed - 5)
+                    rDriveMotor.run(speed)
                 else:
-                    lDriveMotor.run(30)
-                    rDriveMotor.run(25)
+                    lDriveMotor.run(speed)
+                    rDriveMotor.run(speed - 5)
         else:
             while (ultraSensorDrive.distance() > dist):
                 if (driveColor.color() == Color.BLACK):
-                    lDriveMotor.run(30)
-                    rDriveMotor.run(25)
+                    lDriveMotor.run(speed)
+                    rDriveMotor.run(speed - 5)
                 else:
-                    lDriveMotor.run(25)
-                    rDriveMotor.run(30)
+                    lDriveMotor.run(speed - 5)
+                    rDriveMotor.run(speed)
 
         lDriveMotor.brake()
         rDriveMotor.brake()
+    
+
+def main():
+    settings = {'yRailMotor': 'A', 'xRailMotor': 'B', 'lDriveMotor': 'C', 'rDriveMotor': 'D', 'driveColor': '1', 'ultraSensorDrive': '2', 'ballColor': '3', 'ultraSensorColor': '4'}
+    robot = Robot(settings['yRailMotor'], settings['xRailMotor'], settings['lDriveMotor'], settings['rDriveMotor'], settings['driveColor'], settings['ultraSensorDrive'], settings['ballColor'], settings['ultraSensorColor'])
+
+if __name__ == "__main__":
+    main()
