@@ -12,6 +12,9 @@ class Robot:
 
     def __init__(self, yRailMotor, xRailMotor, lDriveMotor, rDriveMotor, driveColor, ultraSensorDrive, ballColor, ultraSensorColor):
         try:
+
+            self.count_balls = 0
+
             if yRailMotor == 'A':
             self.yRailMotor = Motor(Port.A)
             elif yRailMotor == 'B':
@@ -135,6 +138,20 @@ class Robot:
         lDriveMotor.brake()
         rDriveMotor.brake()
     
+    def moveRail(self, pos):
+
+        if (pos == 'takeSecondBall'):
+            if self.count_balls == 0:
+                xRailMotor.run_angle(20, 100)
+                yRailMotor.run_angle(50, 50)
+                xRailMotor.run_angle(20, -100)
+                yRailMotor.run_angle(50, -50)
+            elif self.count_balls == 1:
+                xRailMotor.run_angle(20, 200)
+                yRailMotor.run_angle(50, 50)
+                xRailMotor.run_angle(20, -100)
+                yRailMotor.run_angle(50, -50)
+
 
 def main():
     settings = {'yRailMotor': 'A', 'xRailMotor': 'B', 'lDriveMotor': 'C', 'rDriveMotor': 'D', 'driveColor': '1', 'ultraSensorDrive': '2', 'ballColor': '3', 'ultraSensorColor': '4'}
