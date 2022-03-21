@@ -139,7 +139,7 @@ class Robot:
                     self.rDriveMotor.run(speed - turn)
                     black_cnt = 0
                 if black_cnt == 1:
-                    turn -= 7
+                    turn = max(turn - 10, 0)
                     remake = False
         else:
             while (self.ultraSensorDrive.distance() > dist):
@@ -152,7 +152,7 @@ class Robot:
                     self.rDriveMotor.run(speed + turn)
                     black_cnt = 0
                 if black_cnt == 1:
-                    turn -= 7
+                    turn = max(turn - 10, 0)
                     remake = False
 
         self.lDriveMotor.brake()
@@ -169,20 +169,20 @@ class Robot:
         elif (pos == 'end'):
             self.yRailMotor.run_angle(1000, 110)
         elif (pos == 'startCheckBalls'):
-            self.yRailMotor.run_angle(1000, -455)
+            self.yRailMotor.run_angle(1000, -580)
         elif (pos == 'endCheckBalls'):
-            self.yRailMotor.run_angle(1000, 455)
+            self.yRailMotor.run_angle(1000, 580)
         elif (pos == 'collectBall'):
-            self.yRailMotor.run_angle(1000, 400)
-            self.yRailMotor.run_angle(1000, -400)
+            self.yRailMotor.run_angle(1000, 450)
+            self.yRailMotor.run_angle(1000, -450)
 
     def turnRight(self):
-        self.lDriveMotor.run_angle(1000, -180, Stop.HOLD, False)
-        self.rDriveMotor.run_angle(1000, 180)
+        self.lDriveMotor.run_angle(400, -172, Stop.HOLD, False)
+        self.rDriveMotor.run_angle(400, 172)
 
     def turnLeft(self):
-        self.lDriveMotor.run_angle(1000, 180, Stop.HOLD, False)
-        self.rDriveMotor.run_angle(1000, -180)
+        self.lDriveMotor.run_angle(400, 180, Stop.HOLD, False)
+        self.rDriveMotor.run_angle(400, -180)
 
     def turnToCheckPole(self, speed):
         self.lDriveMotor.run_angle(200, -240, Stop.HOLD, False)
@@ -190,13 +190,14 @@ class Robot:
         self.lDriveMotor.run_angle(speed, -340)
 
         for j in range(3):
+            self.yRailMotor.run_angle(1000, 100)
             self.bay_colors[0][j] = self.ballColorFront.color()
-            print(self.ballColorFront.rgb())
+            self.yRailMotor.run_angle(1000, -100)
             if j == 1:
                 self.yRailMotor.run_angle(1000, -130)
-                self.xRailMotor.run_angle(1000, -1400)
+                self.xRailMotor.run_angle(1000, -1500)
                 self.bay_colors[1][1] = self.ballColorFront.color()
-                self.xRailMotor.run_angle(1000, 1400)
+                self.xRailMotor.run_angle(1000, 1500)
                 self.yRailMotor.run_angle(1000, 130)
             self.lDriveMotor.run_angle(speed, -160, Stop.HOLD, False)
             self.rDriveMotor.run_angle(speed, -160)
@@ -207,19 +208,21 @@ class Robot:
 
         for j in range(3):
             if j > 0:
-                print(self.ballColorFront.rgb())
+                self.yRailMotor.run_angle(1000, 100)
                 self.bay_colors[j][2] = self.ballColorFront.color()
+                self.yRailMotor.run_angle(1000, -100)
             self.lDriveMotor.run_angle(speed, -145, Stop.HOLD, False)
             self.rDriveMotor.run_angle(speed, -145)
 
-        self.lDriveMotor.run_angle(speed, -100, Stop.HOLD, False)
-        self.rDriveMotor.run_angle(speed, -100)
+        self.lDriveMotor.run_angle(speed, -140, Stop.HOLD, False)
+        self.rDriveMotor.run_angle(speed, -140)
         self.lDriveMotor.run_angle(speed, -340)
 
         for j in range(3):
             if (j > 0):
-                print(self.ballColorFront.rgb())
+                self.yRailMotor.run_angle(1000, 100)
                 self.bay_colors[2][2-j] = self.ballColorFront.color()
+                self.yRailMotor.run_angle(1000, -100)
             self.lDriveMotor.run_angle(400, -130, Stop.HOLD, False)
             self.rDriveMotor.run_angle(400, -130)
 
@@ -229,8 +232,9 @@ class Robot:
 
         for j in range(3):
             if j > 0:
-                print(self.ballColorFront.rgb())
+                self.yRailMotor.run_angle(1000, 100)
                 self.bay_colors[2-j][0] = self.ballColorFront.color()
+                self.yRailMotor.run_angle(1000, -100)
             self.lDriveMotor.run_angle(speed, -130, Stop.HOLD, False)
             self.rDriveMotor.run_angle(speed, -130)
 
@@ -247,50 +251,42 @@ class Robot:
             self.rDriveMotor.run(-250)
         self.lDriveMotor.brake()
         self.rDriveMotor.brake()
-        self.lDriveMotor.run_angle(speed, -65, Stop.HOLD, False)
-        self.rDriveMotor.run_angle(speed, -65)
+        self.lDriveMotor.run_angle(speed, -70, Stop.HOLD, False)
+        self.rDriveMotor.run_angle(speed, -70)
         self.turnLeft()
-        self.driveAlongLine(True, 170, -200)
+        self.driveAlongLine(True, 160, -150)
         self.moveRail('startCheckBalls')
-        self.lDriveMotor.run_angle(160, -240, Stop.HOLD, False)
+        self.lDriveMotor.run_angle(155, -240, Stop.HOLD, False)
         self.rDriveMotor.run_angle(400, -600)
 
-        self.collectBalls(100, True)
-
-        self.moveRail('endCheckBalls')
+        self.collectBalls(120, True)
 
     def collectBalls(self, speed, isFront):
         balls_count = 0
         blackLineBe = False
         self.lDriveMotor.run(speed)
-        self.rDriveMotor.run(speed)
-        self.xRailMotor.run_angle(1000, -1200)
+        self.rDriveMotor.run(speed) 
+        self.xRailMotor.run_angle(1000, -1100)
         while (balls_count < 2):
             if (self.driveColor.color() == Color.BLACK):
                 blackLineBe = True
-            if (self.ballColorFront.reflection() >= 10):
+            if (self.ballColorFront.reflection() >= 4):
                 self.lDriveMotor.brake()
                 self.rDriveMotor.brake()
                 if isFront:
                     if balls_count == 0:
-                        self.yRailMotor.run_angle(1000, -200)
-                        self.xRailMotor.run_angle(1000, -920)
+                        self.yRailMotor.run_angle(1000, -60)
+                        self.xRailMotor.run_angle(1000, -680)
+                        self.yRailMotor.run_angle(1000, 60)
                         self.moveRail('collectBall')
+                        self.xRailMotor.run_angle(1000, 680)
                     else:
                         self.moveRail('collectBall')
-                    self.xRailMotor.run_angle(1000, 920)
-                    self.yRailMotor.run_angle(1000, 200)
                     isFront = False
                 else:
-                    if balls_count == 0:
-                        self.yRailMotor.run_angle(1000, -200)
-                        self.xRailMotor.run_angle(1000, -920)
-                        self.moveRail('collectBall')
-                    else:
-                        self.moveRail('collectBall')
-                        self.yRailMotor.run_angle(1000, -200)
-                        self.xRailMotor.run_angle(1000, -920)
-                    isFront = True
+                    pass
+                self.xRailMotor.run_angle(1000, 760)
+                self.yRailMotor.run_angle(1000, 200)
                 balls_count += 1
                 self.lDriveMotor.run(speed)
                 self.rDriveMotor.run(speed)
@@ -298,15 +294,18 @@ class Robot:
                 self.lDriveMotor.brake()
                 self.rDriveMotor.brake()
                 if isFront:
-                    self.xRailMotor.run_angle(1000, 920)
+                    self.xRailMotor.run_angle(1000, 760)
                     self.yRailMotor.run_angle(1000, 200)
                     isFront = False
                 else:
-                    self.xRailMotor.run_angle(1000, -920)
                     self.yRailMotor.run_angle(1000, -200)
+                    self.xRailMotor.run_angle(1000, -760)
                     isFront = True
+                self.lDriveMotor.run_angle(speed, 25, Stop.HOLD, False)
+                self.rDriveMotor.run_angle(speed, 25)
                 self.lDriveMotor.run(speed)
                 self.rDriveMotor.run(speed)
+                
         self.lDriveMotor.brake()
         self.rDriveMotor.brake()
 
@@ -338,8 +337,6 @@ def main():
     robot.turnToCheckPole(400)
     robot.moveRail('endCheckBase')
     robot.rideToStorage(300)
-    # robot.moveRail('endCheckBalls')
-    robot.moveRail('end')
     for i in range(3):
         for j in range(3):
             print(robot.bay_colors[i][j], end=' ')
