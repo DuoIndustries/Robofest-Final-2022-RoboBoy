@@ -288,8 +288,6 @@ class Robot:
                 self.xRailMotor.run_angle(1000, 760)
                 self.yRailMotor.run_angle(1000, 200)
                 balls_count += 1
-                self.lDriveMotor.run(speed)
-                self.rDriveMotor.run(speed)
             elif (self.ballColorFront.reflection() == 0):
                 self.lDriveMotor.brake()
                 self.rDriveMotor.brake()
@@ -303,8 +301,8 @@ class Robot:
                     isFront = True
                 self.lDriveMotor.run_angle(speed, 25, Stop.HOLD, False)
                 self.rDriveMotor.run_angle(speed, 25)
-                self.lDriveMotor.run(speed)
-                self.rDriveMotor.run(speed)
+            self.lDriveMotor.run(speed)
+            self.rDriveMotor.run(speed)
                 
         self.lDriveMotor.brake()
         self.rDriveMotor.brake()
